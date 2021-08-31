@@ -1,13 +1,8 @@
 package com.lucasmurilo.cursospringboot.config;
 
-import com.lucasmurilo.cursospringboot.domain.Categoria;
-import com.lucasmurilo.cursospringboot.domain.Cidade;
-import com.lucasmurilo.cursospringboot.domain.Estado;
-import com.lucasmurilo.cursospringboot.domain.Produto;
-import com.lucasmurilo.cursospringboot.repositories.CategoriaRepository;
-import com.lucasmurilo.cursospringboot.repositories.CidadeRepository;
-import com.lucasmurilo.cursospringboot.repositories.EstadoRepository;
-import com.lucasmurilo.cursospringboot.repositories.ProdutoRepository;
+import com.lucasmurilo.cursospringboot.domain.*;
+import com.lucasmurilo.cursospringboot.domain.emuns.TipoCliente;
+import com.lucasmurilo.cursospringboot.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +25,12 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private CidadeRepository cidadeRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -66,6 +67,17 @@ public class TestConfig implements CommandLineRunner {
         cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 
 
+        Cliente cli1 = new Cliente(null, "Maria Silvia", "maria@gmail.com", "32455255254", TipoCliente.PESSOA_FISICA);
+        cli1.getTelefones().addAll(Arrays.asList("1198989555", "11545454545"));
+        Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "388844848", cli1, c1);
+        Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+
+        cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+
+
+        clienteRepository.saveAll(Arrays.asList(cli1));
+
+        enderecoRepository.saveAll(Arrays.asList(e1, e2));
 
 
 
