@@ -16,7 +16,6 @@ public class Categoria implements Serializable {
     private String nome;
 
     @ManyToMany(mappedBy = "categoria")
-    @JsonIgnore
     private List<Produto> produtos = new ArrayList<>();
 
     public Categoria(){

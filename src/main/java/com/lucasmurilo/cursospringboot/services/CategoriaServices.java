@@ -2,6 +2,7 @@ package com.lucasmurilo.cursospringboot.services;
 
 import com.lucasmurilo.cursospringboot.domain.Categoria;
 import com.lucasmurilo.cursospringboot.repositories.CategoriaRepository;
+import com.lucasmurilo.cursospringboot.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class CategoriaServices {
 
     public Categoria findById(Integer id){
         Optional<Categoria> cat = repository.findById(id);
-        return cat.orElse(null);
+        return cat.orElseThrow(() -> new ObjectNotFoundException(
+                "Objeto nao encontrado! Id: " + id + ", tipo: " + Categoria.class.getName()));
     }
 }

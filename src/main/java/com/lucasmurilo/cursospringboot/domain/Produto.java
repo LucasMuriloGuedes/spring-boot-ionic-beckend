@@ -1,5 +1,7 @@
 package com.lucasmurilo.cursospringboot.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ public class Produto {
     @JoinTable(name = "PRODUTO_CATEGORIA",
             joinColumns = @JoinColumn(name = "produto_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    @JsonIgnore
     private List<Categoria> categoria = new ArrayList<>();
 
     public Produto(){
