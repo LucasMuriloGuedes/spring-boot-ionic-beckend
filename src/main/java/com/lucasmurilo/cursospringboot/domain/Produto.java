@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -21,6 +23,9 @@ public class Produto {
     @JsonIgnore
     private List<Categoria> categoria = new ArrayList<>();
 
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itens = new HashSet<>();
+
     public Produto(){
 
     }
@@ -29,6 +34,15 @@ public class Produto {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public List<Pedido> getPedidos(){
+        List<Pedido> lista = new ArrayList<>();
+        for(ItemPedido x: itens){
+            lista.add(x.getPedido());
+        }
+
+        return lista;
     }
 
     public Integer getId() {
@@ -57,5 +71,9 @@ public class Produto {
 
     public List<Categoria> getCategoria() {
         return categoria;
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
     }
 }

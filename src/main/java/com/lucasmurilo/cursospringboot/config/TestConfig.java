@@ -1,6 +1,7 @@
 package com.lucasmurilo.cursospringboot.config;
 
 import com.lucasmurilo.cursospringboot.domain.*;
+import com.lucasmurilo.cursospringboot.domain.emuns.EstadoPagamento;
 import com.lucasmurilo.cursospringboot.domain.emuns.TipoCliente;
 import com.lucasmurilo.cursospringboot.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 @Configuration
@@ -31,6 +33,15 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
+
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -79,6 +90,33 @@ public class TestConfig implements CommandLineRunner {
 
         enderecoRepository.saveAll(Arrays.asList(e1, e2));
 
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+        Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+
+        Pagamento pgt1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+        ped1.setPagamento(pgt1);
+        Pagamento pgt2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("25/07/2017 00:00"), null ) ;
+        ped2.setPagamento(pgt2);
+
+        cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+        pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+        pagamentoRepository.saveAll(Arrays.asList(pgt1, pgt2));
+
+        ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1 , 2000.00);
+        ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2,80.00);
+        ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+
+        ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+        ped2.getItens().add(ip3);
+
+        p1.getItens().add(ip1);
+        p2.getItens().add(ip3);
+        p3.getItens().add(ip2);
+
+        itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 
 
     }
