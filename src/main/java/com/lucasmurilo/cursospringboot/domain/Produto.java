@@ -24,6 +24,7 @@ public class Produto {
     private List<Categoria> categoria = new ArrayList<>();
 
     @OneToMany(mappedBy = "id.produto")
+    @JsonIgnore
     private Set<ItemPedido> itens = new HashSet<>();
 
     public Produto(){
@@ -36,6 +37,7 @@ public class Produto {
         this.preco = preco;
     }
 
+    @JsonIgnore
     public List<Pedido> getPedidos(){
         List<Pedido> lista = new ArrayList<>();
         for(ItemPedido x: itens){

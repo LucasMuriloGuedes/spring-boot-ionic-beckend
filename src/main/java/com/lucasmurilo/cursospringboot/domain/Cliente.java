@@ -1,5 +1,6 @@
 package com.lucasmurilo.cursospringboot.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucasmurilo.cursospringboot.domain.emuns.TipoCliente;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Cliente implements Serializable {
     private List<Endereco> enderecos = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
 
     private Cliente(){
